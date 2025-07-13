@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Calendar, MapPin, Users, Globe, DollarSign, Clock, FileText, Mail, Phone, ChevronDown, ChevronUp, ChevronLeft, ChevronRight, Star, Award, Zap } from 'lucide-react';
+import { Calendar, MapPin, Users, Globe, DollarSign, Clock, FileText, Mail, Phone, ChevronDown, ChevronUp, ChevronLeft, ChevronRight, Star, Award, Zap, Timer } from 'lucide-react';
 
 interface TopicCardProps {
   title: string;
@@ -32,6 +32,59 @@ interface CarouselProps {
     type: string;
   }>;
 }
+
+const CountdownClock: React.FC = () => {
+  const [timeLeft, setTimeLeft] = useState({
+    days: 0,
+    hours: 0,
+    minutes: 0,
+    seconds: 0
+  });
+
+  useEffect(() => {
+    const targetDate = new Date('2025-11-20T09:00:00');
+    
+    const timer = setInterval(() => {
+      const now = new Date().getTime();
+      const distance = targetDate.getTime() - now;
+      
+      if (distance > 0) {
+        setTimeLeft({
+          days: Math.floor(distance / (1000 * 60 * 60 * 24)),
+          hours: Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+          minutes: Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
+          seconds: Math.floor((distance % (1000 * 60)) / 1000)
+        });
+      }
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
+
+  return (
+    <div className="flex justify-center items-center space-x-4 mb-8">
+      <div className="bg-white/20 backdrop-blur-sm border border-white/30 rounded-2xl p-4 text-center min-w-[80px] transform hover:scale-105 transition-all duration-300">
+        <div className="text-3xl font-bold text-white">{timeLeft.days}</div>
+        <div className="text-emerald-200 text-sm font-semibold">Days</div>
+      </div>
+      <div className="text-white text-2xl font-bold">:</div>
+      <div className="bg-white/20 backdrop-blur-sm border border-white/30 rounded-2xl p-4 text-center min-w-[80px] transform hover:scale-105 transition-all duration-300">
+        <div className="text-3xl font-bold text-white">{timeLeft.hours}</div>
+        <div className="text-emerald-200 text-sm font-semibold">Hours</div>
+      </div>
+      <div className="text-white text-2xl font-bold">:</div>
+      <div className="bg-white/20 backdrop-blur-sm border border-white/30 rounded-2xl p-4 text-center min-w-[80px] transform hover:scale-105 transition-all duration-300">
+        <div className="text-3xl font-bold text-white">{timeLeft.minutes}</div>
+        <div className="text-emerald-200 text-sm font-semibold">Minutes</div>
+      </div>
+      <div className="text-white text-2xl font-bold">:</div>
+      <div className="bg-white/20 backdrop-blur-sm border border-white/30 rounded-2xl p-4 text-center min-w-[80px] transform hover:scale-105 transition-all duration-300">
+        <div className="text-3xl font-bold text-white">{timeLeft.seconds}</div>
+        <div className="text-emerald-200 text-sm font-semibold">Seconds</div>
+      </div>
+    </div>
+  );
+};
 
 const EventsCarousel: React.FC<CarouselProps> = ({ events }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -113,6 +166,17 @@ const EventsCarousel: React.FC<CarouselProps> = ({ events }) => {
 function App() {
   const [expandedTopic, setExpandedTopic] = useState<number | null>(null);
   const [currentPage, setCurrentPage] = useState('home');
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrolled = window.scrollY > 50;
+      setIsScrolled(scrolled);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const topics = [
     "Locally Led & Community-Based Adaptation",
@@ -135,77 +199,77 @@ function App() {
       title: "Opening Keynote: Climate Leadership in Action",
       description: "Join world-renowned climate scientists and policy makers for an inspiring opening session",
       image: "https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg",
-      date: "November 20, 9:00 AM",
+      date: "November 20, 2025 - 9:00 AM",
       type: "Keynote"
     },
     {
       title: "Youth Climate Innovation Showcase",
       description: "Discover groundbreaking solutions from young climate innovators around the globe",
       image: "https://images.pexels.com/photos/3184338/pexels-photo-3184338.jpeg",
-      date: "November 20, 2:00 PM",
+      date: "November 20, 2025 - 2:00 PM",
       type: "Innovation"
     },
     {
       title: "Indigenous Knowledge Panel",
       description: "Learn from indigenous communities about traditional ecological wisdom and climate adaptation",
       image: "https://images.pexels.com/photos/3184360/pexels-photo-3184360.jpeg",
-      date: "November 21, 10:00 AM",
+      date: "November 21, 2025 - 10:00 AM",
       type: "Panel"
     },
     {
       title: "Climate Finance Workshop",
       description: "Interactive session on green investment models and sustainable financing strategies",
       image: "https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg",
-      date: "November 21, 3:00 PM",
+      date: "November 21, 2025 - 3:00 PM",
       type: "Workshop"
     }
   ];
 
   const timelineEvents = [
     {
-      date: "July 15, 2024",
+      date: "July 15, 2025",
       title: "Conference Announcement",
       description: "Official announcement of the Environment and Changing Climate conference",
       icon: <Globe className="h-5 w-5" />,
       color: "bg-blue-500"
     },
     {
-      date: "August 1, 2024",
+      date: "August 1, 2025",
       title: "Call for Abstracts Opens",
       description: "Abstract submission portal opens for researchers and practitioners",
       icon: <FileText className="h-5 w-5" />,
       color: "bg-emerald-500"
     },
     {
-      date: "September 1, 2024",
+      date: "September 1, 2025",
       title: "Abstract Submission Deadline",
       description: "Final deadline for abstract submissions",
       icon: <Clock className="h-5 w-5" />,
       color: "bg-orange-500"
     },
     {
-      date: "October 1, 2024",
+      date: "October 1, 2025",
       title: "Abstract Acceptance Notification",
       description: "Authors will be notified about abstract acceptance",
       icon: <Mail className="h-5 w-5" />,
       color: "bg-purple-500"
     },
     {
-      date: "October 15, 2024",
+      date: "October 15, 2025",
       title: "Early Bird Registration Ends",
       description: "Last chance for discounted registration fees",
       icon: <DollarSign className="h-5 w-5" />,
       color: "bg-red-500"
     },
     {
-      date: "November 1, 2024",
+      date: "November 1, 2025",
       title: "Final Program Release",
       description: "Complete conference schedule and speaker lineup announced",
       icon: <Calendar className="h-5 w-5" />,
       color: "bg-indigo-500"
     },
     {
-      date: "November 20-21, 2024",
+      date: "November 20-21, 2025",
       title: "Conference Days",
       description: "Main conference event with keynotes, panels, and workshops",
       icon: <Star className="h-5 w-5" />,
@@ -259,32 +323,35 @@ function App() {
               alt="Climate Conference"
               className="w-full h-full object-cover"
             />
-          <div className="absolute inset-0 bg-gradient-to-br from-black/70 via-emerald-900/80 to-black/70"></div>
+          <div className="absolute inset-0 bg-gradient-to-br from-black/80 via-emerald-900/90 to-black/80"></div>
         </div>
         
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="animate-fade-in">
-            <h1 className="text-5xl md:text-7xl font-bold mb-8 leading-tight text-white drop-shadow-lg">
+            <h1 className="text-5xl md:text-7xl font-bold mb-4 leading-tight text-white drop-shadow-lg">
               Environment and <span className="text-white">Changing Climate</span>
             </h1>
-            <p className="text-2xl md:text-3xl mb-12 text-emerald-100 font-light">
+
+            <p className="text-2xl md:text-3xl mb-8 text-emerald-100 font-light">
               Global Strategies and Local Actions
             </p>
+            <h2 className="text-3xl md:text-5xl font-bold mb-8 text-emerald-200 drop-shadow-lg">
+              Conference 2025
+            </h2>
             <div className="flex flex-wrap justify-center gap-6 mb-12">
               <div className="flex items-center bg-white/20 backdrop-blur-sm px-6 py-3 rounded-full border border-white/30">
                 <Calendar className="h-6 w-6 mr-3 text-emerald-300" />
-                <span className="text-white font-semibold">November 20-21, 2024</span>
+                <span className="text-white font-bold">November 20-21, 2025</span>
               </div>
               <div className="flex items-center bg-white/20 backdrop-blur-sm px-6 py-3 rounded-full border border-white/30">
                 <MapPin className="h-6 w-6 mr-3 text-emerald-300" />
-                <span className="text-white font-semibold">Independent University, Bangladesh</span>
+                <span className="text-white font-bold">Independent University, Bangladesh</span>
               </div>
-              <div className="flex items-center bg-white/20 backdrop-blur-sm px-6 py-3 rounded-full border border-white/30">
-                <Users className="h-6 w-6 mr-3 text-emerald-300" />
-                <span className="text-white font-semibold">Hybrid Event</span>
-              </div>
+
             </div>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            
+            {/* Enhanced Register Now Button */}
+            <div className="flex flex-col items-center space-y-6 mb-8">
               <button 
                 onClick={() => {
                   setCurrentPage('home');
@@ -293,22 +360,23 @@ function App() {
                     registrationSection?.scrollIntoView({ behavior: 'smooth' });
                   }, 100);
                 }}
-                className="bg-emerald-500 hover:bg-emerald-400 text-white px-10 py-4 rounded-full font-bold text-lg transition-all duration-300 transform hover:scale-105 shadow-xl"
+                className="bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-white px-16 py-6 rounded-full font-bold text-2xl transition-all duration-300 transform hover:scale-110 shadow-2xl border-4 border-white/20 hover:border-white/40 animate-pulse"
               >
-                Register Now
+                🎟️ Register Now
               </button>
-              <button 
-                onClick={() => {
-                  setCurrentPage('home');
-                  setTimeout(() => {
-                    const topicsSection = document.getElementById('topics');
-                    topicsSection?.scrollIntoView({ behavior: 'smooth' });
-                  }, 100);
-                }}
-                className="bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white border-2 border-white/50 px-10 py-4 rounded-full font-bold text-lg transition-all duration-300 transform hover:scale-105"
-              >
-                View Program
-              </button>
+              
+              {/* Countdown Clock */}
+              <div>
+                <div className="flex items-center justify-center mb-4">
+                  <Timer className="h-8 w-8 text-emerald-300 mr-3" />
+                  <span className="text-xl font-semibold text-emerald-200">Conference Starts In:</span>
+                </div>
+                <CountdownClock />
+              </div>
+            </div>
+            
+            <div className="flex justify-center">
+
             </div>
           </div>
         </div>
@@ -384,7 +452,7 @@ function App() {
                 <Calendar className="h-8 w-8 text-white" />
               </div>
               <h3 className="font-bold text-gray-900 mb-3 text-xl">Conference Dates</h3>
-              <p className="text-gray-600 text-lg">November 20-21, 2024</p>
+              <p className="text-gray-600 text-lg">November 20-21, 2025</p>
               <p className="text-gray-600">Thursday & Friday</p>
             </div>
             <div className="bg-white/80 backdrop-blur-sm p-8 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-emerald-100">
@@ -618,18 +686,14 @@ function App() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Enhanced Navigation */}
-      <nav className="bg-white/95 backdrop-blur-sm shadow-xl sticky top-0 z-50 border-b border-emerald-100">
+      <nav className={`sticky top-0 z-50 transition-all duration-300 ${
+        isScrolled 
+          ? 'bg-white/30 backdrop-blur-sm shadow-lg border-b border-white/20' 
+          : 'bg-transparent'
+      }`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-20">
-            <div className="flex items-center">
-              <div className="bg-gradient-to-br from-emerald-500 to-teal-500 p-2 rounded-xl shadow-lg">
-                <Globe className="h-8 w-8 text-white" />
-              </div>
-              <span className="ml-4 text-2xl font-bold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
-                Climate Conference 2024
-              </span>
-            </div>
-            <div className="hidden md:flex items-center space-x-8">
+          <div className="flex justify-center h-20">
+            <div className="flex items-center space-x-8">
               <button 
                 onClick={() => {
                   setCurrentPage('home');
@@ -637,7 +701,7 @@ function App() {
                   // Clear hash from URL
                   window.history.pushState('', document.title, window.location.pathname);
                 }}
-                className={`font-semibold transition-colors duration-200 ${currentPage === 'home' ? 'text-emerald-600' : 'text-gray-700 hover:text-emerald-600'}`}
+                className={`font-semibold transition-colors duration-200 ${currentPage === 'home' ? 'text-emerald-600' : 'text-gray-800 hover:text-emerald-600'}`}
               >
                 Home
               </button>
@@ -648,7 +712,7 @@ function App() {
                   // Clear hash from URL
                   window.history.pushState('', document.title, window.location.pathname);
                 }}
-                className={`font-semibold transition-colors duration-200 ${currentPage === 'timeline' ? 'text-emerald-600' : 'text-gray-700 hover:text-emerald-600'}`}
+                className={`font-semibold transition-colors duration-200 ${currentPage === 'timeline' ? 'text-emerald-600' : 'text-gray-800 hover:text-emerald-600'}`}
               >
                 Timeline
               </button>
@@ -660,7 +724,7 @@ function App() {
                     element?.scrollIntoView({ behavior: 'smooth' });
                   }, 100);
                 }}
-                className="text-gray-700 hover:text-emerald-600 transition-colors font-semibold"
+                className="text-gray-800 hover:text-emerald-600 transition-colors font-semibold"
               >
                 Topics
               </button>
@@ -672,7 +736,7 @@ function App() {
                     element?.scrollIntoView({ behavior: 'smooth' });
                   }, 100);
                 }}
-                className="text-gray-700 hover:text-emerald-600 transition-colors font-semibold"
+                className="text-gray-800 hover:text-emerald-600 transition-colors font-semibold"
               >
                 Registration
               </button>
@@ -684,7 +748,7 @@ function App() {
                     element?.scrollIntoView({ behavior: 'smooth' });
                   }, 100);
                 }}
-                className="text-gray-700 hover:text-emerald-600 transition-colors font-semibold"
+                className="text-gray-800 hover:text-emerald-600 transition-colors font-semibold"
               >
                 Speakers
               </button>
@@ -696,7 +760,7 @@ function App() {
                     element?.scrollIntoView({ behavior: 'smooth' });
                   }, 100);
                 }}
-                className="text-gray-700 hover:text-emerald-600 transition-colors font-semibold"
+                className="text-gray-800 hover:text-emerald-600 transition-colors font-semibold"
               >
                 Contact
               </button>
@@ -723,7 +787,7 @@ function App() {
               <div className="bg-gradient-to-br from-emerald-500 to-teal-500 p-3 rounded-xl shadow-lg mr-4">
                 <Globe className="h-8 w-8 text-white" />
               </div>
-              <span className="text-2xl font-bold">Environment and Changing Climate Conference 2024</span>
+              <span className="text-2xl font-bold">Environment and Changing Climate Conference 2025</span>
             </div>
             <p className="text-emerald-300 mb-6 text-xl">Global Strategies and Local Actions</p>
             <div className="flex justify-center space-x-6 mb-8">
@@ -737,7 +801,7 @@ function App() {
                 <Globe className="h-5 w-5" />
               </div>
             </div>
-            <p className="text-gray-400">© 2024 Independent University, Bangladesh. All rights reserved.</p>
+            <p className="text-gray-400">© 2025 Independent University, Bangladesh. All rights reserved.</p>
           </div>
         </div>
       </footer>
