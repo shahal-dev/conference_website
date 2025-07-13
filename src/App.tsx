@@ -254,18 +254,18 @@ function App() {
       {/* Hero Section with Background Image */}
       <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0">
-          <img 
-            src="https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg" 
-            alt="Climate Conference"
-            className="w-full h-full object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-br from-emerald-900/80 via-emerald-800/70 to-teal-900/80"></div>
+                      <img 
+              src="download.webp" 
+              alt="Climate Conference"
+              className="w-full h-full object-cover"
+            />
+          <div className="absolute inset-0 bg-gradient-to-br from-black/70 via-emerald-900/80 to-black/70"></div>
         </div>
         
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="animate-fade-in">
             <h1 className="text-5xl md:text-7xl font-bold mb-8 leading-tight text-white drop-shadow-lg">
-              Environment and <span className="text-emerald-300">Changing Climate</span>
+              Environment and <span className="text-white">Changing Climate</span>
             </h1>
             <p className="text-2xl md:text-3xl mb-12 text-emerald-100 font-light">
               Global Strategies and Local Actions
@@ -287,8 +287,11 @@ function App() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <button 
                 onClick={() => {
-                  const registrationSection = document.getElementById('registration');
-                  registrationSection?.scrollIntoView({ behavior: 'smooth' });
+                  setCurrentPage('home');
+                  setTimeout(() => {
+                    const registrationSection = document.getElementById('registration');
+                    registrationSection?.scrollIntoView({ behavior: 'smooth' });
+                  }, 100);
                 }}
                 className="bg-emerald-500 hover:bg-emerald-400 text-white px-10 py-4 rounded-full font-bold text-lg transition-all duration-300 transform hover:scale-105 shadow-xl"
               >
@@ -296,8 +299,11 @@ function App() {
               </button>
               <button 
                 onClick={() => {
-                  const topicsSection = document.getElementById('topics');
-                  topicsSection?.scrollIntoView({ behavior: 'smooth' });
+                  setCurrentPage('home');
+                  setTimeout(() => {
+                    const topicsSection = document.getElementById('topics');
+                    topicsSection?.scrollIntoView({ behavior: 'smooth' });
+                  }, 100);
                 }}
                 className="bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white border-2 border-white/50 px-10 py-4 rounded-full font-bold text-lg transition-all duration-300 transform hover:scale-105"
               >
@@ -625,21 +631,75 @@ function App() {
             </div>
             <div className="hidden md:flex items-center space-x-8">
               <button 
-                onClick={() => setCurrentPage('home')}
+                onClick={() => {
+                  setCurrentPage('home');
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                  // Clear hash from URL
+                  window.history.pushState('', document.title, window.location.pathname);
+                }}
                 className={`font-semibold transition-colors duration-200 ${currentPage === 'home' ? 'text-emerald-600' : 'text-gray-700 hover:text-emerald-600'}`}
               >
                 Home
               </button>
               <button 
-                onClick={() => setCurrentPage('timeline')}
+                onClick={() => {
+                  setCurrentPage('timeline');
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                  // Clear hash from URL
+                  window.history.pushState('', document.title, window.location.pathname);
+                }}
                 className={`font-semibold transition-colors duration-200 ${currentPage === 'timeline' ? 'text-emerald-600' : 'text-gray-700 hover:text-emerald-600'}`}
               >
                 Timeline
               </button>
-              <a href="#topics" className="text-gray-700 hover:text-emerald-600 transition-colors font-semibold">Topics</a>
-              <a href="#registration" className="text-gray-700 hover:text-emerald-600 transition-colors font-semibold">Registration</a>
-              <a href="#speakers" className="text-gray-700 hover:text-emerald-600 transition-colors font-semibold">Speakers</a>
-              <a href="#contact" className="text-gray-700 hover:text-emerald-600 transition-colors font-semibold">Contact</a>
+              <button 
+                onClick={() => {
+                  setCurrentPage('home');
+                  setTimeout(() => {
+                    const element = document.getElementById('topics');
+                    element?.scrollIntoView({ behavior: 'smooth' });
+                  }, 100);
+                }}
+                className="text-gray-700 hover:text-emerald-600 transition-colors font-semibold"
+              >
+                Topics
+              </button>
+              <button 
+                onClick={() => {
+                  setCurrentPage('home');
+                  setTimeout(() => {
+                    const element = document.getElementById('registration');
+                    element?.scrollIntoView({ behavior: 'smooth' });
+                  }, 100);
+                }}
+                className="text-gray-700 hover:text-emerald-600 transition-colors font-semibold"
+              >
+                Registration
+              </button>
+              <button 
+                onClick={() => {
+                  setCurrentPage('home');
+                  setTimeout(() => {
+                    const element = document.getElementById('speakers');
+                    element?.scrollIntoView({ behavior: 'smooth' });
+                  }, 100);
+                }}
+                className="text-gray-700 hover:text-emerald-600 transition-colors font-semibold"
+              >
+                Speakers
+              </button>
+              <button 
+                onClick={() => {
+                  setCurrentPage('home');
+                  setTimeout(() => {
+                    const element = document.getElementById('contact');
+                    element?.scrollIntoView({ behavior: 'smooth' });
+                  }, 100);
+                }}
+                className="text-gray-700 hover:text-emerald-600 transition-colors font-semibold"
+              >
+                Contact
+              </button>
             </div>
           </div>
         </div>
