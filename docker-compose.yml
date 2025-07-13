@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  climate-conference-website:
+    build: .
+    ports:
+      - "3000:80"
+    container_name: climate-conference-app
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+    networks:
+      - conference-network
+
+networks:
+  conference-network:
+    driver: bridge
