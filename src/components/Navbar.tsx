@@ -20,28 +20,25 @@ const Navbar: React.FC<NavbarProps> = ({ currentPage, setCurrentPage }) => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const scrollToSection = (sectionId: string) => {
-    setCurrentPage('home');
-    setIsMobileMenuOpen(false);
-    setTimeout(() => {
-      const element = document.getElementById(sectionId);
-      element?.scrollIntoView({ behavior: 'smooth' });
-    }, 100);
-  };
-
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
     window.history.pushState('', document.title, window.location.pathname);
     setIsMobileMenuOpen(false);
   };
 
+  const handlePageChange = (page: string) => {
+    setCurrentPage(page);
+    scrollToTop();
+  };
+
   const navItems = [
-    { label: 'Home', action: () => { setCurrentPage('home'); scrollToTop(); } },
-    { label: 'Timeline', action: () => { setCurrentPage('timeline'); scrollToTop(); } },
-    { label: 'Topics', action: () => scrollToSection('topics') },
-    { label: 'Registration', action: () => scrollToSection('registration') },
-    { label: 'Speakers', action: () => scrollToSection('speakers') },
-    { label: 'Contact', action: () => scrollToSection('contact') },
+    { label: 'Home', page: 'home' },
+    { label: 'Timeline', page: 'timeline' },
+    { label: 'Topics', page: 'topics' },
+    { label: 'Registration', page: 'registration' },
+    { label: 'Speakers', page: 'speakers' },
+    { label: 'Author Guidelines', page: 'author-guidelines' },
+    { label: 'Contact', page: 'contact' },
   ];
 
   return (
@@ -55,25 +52,21 @@ const Navbar: React.FC<NavbarProps> = ({ currentPage, setCurrentPage }) => {
           {/* Logo/Brand - Hidden on mobile, shown on larger screens */}
           <div className="hidden md:block">
             <button 
-              onClick={() => {
-                setCurrentPage('home');
-                scrollToTop();
-              }}
+              onClick={() => handlePageChange('home')}
               className="text-lg font-bold text-emerald-600 hover:text-emerald-500 transition-colors"
             >
-              ECC 2025
+              ECCGSLA 2025
             </button>
           </div>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center justify-center space-x-4 lg:space-x-8">
+          <div className="hidden md:flex items-center justify-center space-x-2 lg:space-x-4">
             {navItems.map((item, index) => (
               <button 
                 key={index}
-                onClick={item.action}
-                className={`font-semibold transition-colors duration-200 text-sm lg:text-base px-2 py-1 rounded-lg ${
-                  (item.label === 'Home' && currentPage === 'home') || 
-                  (item.label === 'Timeline' && currentPage === 'timeline')
+                onClick={() => handlePageChange(item.page)}
+                className={`font-semibold transition-colors duration-200 text-xs lg:text-sm px-2 py-1 rounded-lg ${
+                  currentPage === item.page
                     ? 'text-emerald-600 bg-emerald-50' 
                     : 'text-gray-800 hover:text-emerald-600 hover:bg-emerald-50'
                 }`}
@@ -105,10 +98,9 @@ const Navbar: React.FC<NavbarProps> = ({ currentPage, setCurrentPage }) => {
               {navItems.map((item, index) => (
                 <button
                   key={index}
-                  onClick={item.action}
+                  onClick={() => handlePageChange(item.page)}
                   className={`block w-full text-left px-3 py-2 rounded-lg text-base font-medium transition-colors ${
-                    (item.label === 'Home' && currentPage === 'home') || 
-                    (item.label === 'Timeline' && currentPage === 'timeline')
+                    currentPage === item.page
                       ? 'text-emerald-600 bg-emerald-50' 
                       : 'text-gray-800 hover:text-emerald-600 hover:bg-emerald-50'
                   }`}
